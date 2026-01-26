@@ -243,14 +243,13 @@ export default function App() {
 
   const backgroundColor = isDay ? "#4ea1d3" : "#0f2027";
 
-  // Gera estrelas aleatórias quando é noite
   const stars = useMemo(() => {
     if (isDay) return [];
     const { width, height } = Dimensions.get("window");
     return Array.from({ length: 50 }).map((_, i) => ({
       id: i,
       left: Math.random() * width,
-      top: Math.random() * (height * 0.6), // Estrelas na parte superior
+      top: Math.random() * (height * 0.85),
       size: Math.random() * 2 + 1,
       opacity: Math.random() * 0.8 + 0.2,
     }));
@@ -260,11 +259,15 @@ export default function App() {
     <SafeAreaView style={[styles.container, { backgroundColor }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
 
-      {/* Elementos do Céu (Estrelas/Lua ou Nuvens) */}
       <View style={StyleSheet.absoluteFill} pointerEvents="none">
         {!isDay ? (
           <>
-            <View style={styles.moon} />
+            <LottieView
+              source={require("./assets/astronaut-floating.json")}
+              autoPlay
+              loop
+              style={styles.astronaut}
+            />
             {stars.map((star) => (
               <View
                 key={star.id}
@@ -284,45 +287,44 @@ export default function App() {
         ) : (
           <>
             <LottieView
-              source={require("./assets/day-few-clouds.json")}
+              source={require("./assets/Clouds.json")}
+              autoPlay
+              loop
+              style={styles.bgCloud2}
+            />
+            <LottieView
+              source={require("./assets/Clouds.json")}
               autoPlay
               loop
               style={styles.bgCloud1}
             />
             <LottieView
-              source={require("./assets/day-few-clouds.json")}
+              source={require("./assets/paperplane.json")}
               autoPlay
               loop
-              style={styles.bgCloud2}
+              style={styles.bgCloud3}
             />
           </>
         )}
       </View>
 
-      {/* Paisagem (Chão, Árvores e Arbustos) */}
       <View style={styles.landscape} pointerEvents="none">
-        {/* Árvore Esquerda */}
         <View style={[styles.treeContainer, { left: 20, bottom: 60 }]}>
           <View style={[styles.treeFoliage, { backgroundColor: isDay ? "#558B2F" : "#1B3026" }]} />
           <View style={[styles.treeTrunk, { backgroundColor: isDay ? "#795548" : "#3E2723" }]} />
         </View>
 
-        {/* Arbusto Esquerda */}
         <View style={[styles.bush, { left: 80, bottom: 60, backgroundColor: isDay ? "#689F38" : "#243B30" }]} />
 
-        {/* Árvore Direita (Maior) */}
         <View style={[styles.treeContainer, { right: -10, bottom: 60 }]}>
           <View style={[styles.treeFoliage, { width: 80, height: 80, borderRadius: 40, backgroundColor: isDay ? "#558B2F" : "#1B3026" }]} />
           <View style={[styles.treeTrunk, { height: 60, width: 16, backgroundColor: isDay ? "#795548" : "#3E2723" }]} />
         </View>
 
-        {/* Arbusto Direita */}
         <View style={[styles.bush, { right: 90, bottom: 60, width: 50, height: 30, backgroundColor: isDay ? "#689F38" : "#243B30" }]} />
         
-        {/* Arbusto Pequeno Centro-Direita */}
         <View style={[styles.bush, { right: 150, bottom: 60, width: 30, height: 20, backgroundColor: isDay ? "#7CB342" : "#2E4838" }]} />
 
-        {/* Chão */}
         <View style={[styles.ground, { backgroundColor: isDay ? "#8BC34A" : "#2E4838" }]} />
       </View>
 
@@ -464,8 +466,8 @@ export default function App() {
             <LottieView
               autoPlay
               loop
-              style={styles.lottieIcon}
-              source={require("./assets/weather-icon.json")}
+              style={styles.lottieIconOpen}
+              source={require("./assets/paperplane.json")}
             />
           </View>
         )}
@@ -549,6 +551,10 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   lottieIcon: {
+    width: 250,
+    height: 250,
+  },
+  lottieIconOpen: {
     width: 250,
     height: 250,
   },
@@ -638,19 +644,21 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     opacity: 0.8,
   },
-  moon: {
+  astronaut: {
     position: "absolute",
-    top: 80,
-    right: 30,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: "#FEFCD7", // Amarelo pálido
-    shadowColor: "#FEFCD7",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 20,
-    elevation: 10,
+    top: 10,
+    right: -20,
+    width: 140,
+    height: 140,
+    opacity: 0.6,
+  },
+  astronaut1: {
+    position: "absolute",
+    top: 10,
+    right: -20,
+    width: 140,
+    height: 140,
+    opacity: 0.6,
   },
   landscape: {
     position: 'absolute',
@@ -674,7 +682,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    marginBottom: -15, // Sobrepõe levemente o tronco
+    marginBottom: -15,
     zIndex: 2,
   },
   treeTrunk: {
@@ -703,6 +711,14 @@ const styles = StyleSheet.create({
     right: -40,
     width: 220,
     height: 220,
+    opacity: 0.4,
+  },
+  bgCloud3: {
+    position: "absolute",
+    top: 750,
+    right: 200,
+    width: 200,
+    height: 200,
     opacity: 0.4,
   },
 });
